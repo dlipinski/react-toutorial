@@ -49,6 +49,7 @@ class Game extends React.Component {
         this.state = {
           history: [{
             squares: Array(9).fill(null),
+            cord: null,
           }],
           stepNumber: 0,
           xIsNext: true,
@@ -66,6 +67,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat([{
                 squares: squares,
+                cord: i,
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -88,9 +90,12 @@ class Game extends React.Component {
             const desc = move ?
                 'Go to move #' + move :
                 'Go to start';
+            const coord = step.cord ?
+                stringifyCoord(step.cord) :
+                '';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button onClick={() => this.jumpTo(move)}>{desc} {coord}</button>
                 </li>
             );
         });
@@ -144,4 +149,10 @@ function calculateWinner(squares) {
       }
     }
     return null;
+}
+
+function stringifyCoord(i) {
+    const x = i % 3;
+    const y = Math.floor(i / 3);
+    return '[' + (x + 1) + ',' + (y + 1) + ']';
 }
